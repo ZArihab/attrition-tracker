@@ -1,11 +1,11 @@
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import AppLayout from "@cloudscape-design/components/app-layout";
 import SideNavigation from "@cloudscape-design/components/side-navigation";
 import TopNavigation from "@cloudscape-design/components/top-navigation";
 import "@cloudscape-design/global-styles/index.css";
 import "./App.css";
-// import { signInWithRedirect, getCurrentUser } from "aws-amplify/auth";
+import { signInWithRedirect, getCurrentUser } from "aws-amplify/auth";
 
 import DashboardPage from "./pages/DashboardPage";
 import AttritionsPage from "./pages/attritions/AttritionsPage";
@@ -16,13 +16,13 @@ function App() {
   const location = useLocation();
 
   // Only attempt sign-in once, and only if the user isn't already signed in.
-  /*useEffect(() => {
+  useEffect(() => {
     getCurrentUser()
       .then((user) => console.log("Signed in as", user))
       .catch(() => {
         signInWithRedirect({ provider: { custom: "AmazonFederate" } });
       });
-  }, []);*/
+  }, []);
 
   return (
     <>
