@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import AppLayout from "@cloudscape-design/components/app-layout";
 import SideNavigation from "@cloudscape-design/components/side-navigation";
 import TopNavigation from "@cloudscape-design/components/top-navigation";
+import Spinner from "@cloudscape-design/components/spinner";
+import Box from "@cloudscape-design/components/box";
 import "@cloudscape-design/global-styles/index.css";
 import "./App.css";
 import { signInWithRedirect, getCurrentUser } from "aws-amplify/auth";
@@ -11,18 +13,41 @@ import DashboardPage from "./pages/DashboardPage";
 import AttritionsPage from "./pages/attritions/AttritionsPage";
 import EmployeesPage from "./pages/employees/EmployeesPage";
 
+type AuthState = "checking" | "signedIn" | "signedOut";
+
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [authState, setAuthState] = useState<AuthState>("checking");
 
   // Only attempt sign-in once, and only if the user isn't already signed in.
   useEffect(() => {
     getCurrentUser()
-      .then((user) => console.log("Signed in as", user))
+      .then(() => setAuthState("signedIn"))
       .catch(() => {
-        signInWithRedirect({ provider: { custom: "AmazonFederate" } });
+        setAuthState("signedOut");
+        signInWithRedirect({ provider: { custom: "AmazonFederate" } }).catch(
+          (err) => console.error("Sign-in redirect failed", err)
+        );
       });
   }, []);
+
+
+  if (authState !== "signedIn") {
+    return (
+      <Box
+        textAlign="center"
+        padding={{ top: "xxxl" }}
+        margin={{ top: "xxxl" }}
+      >
+        <Spinner size="large" />
+        <Box variant="p" padding={{ top: "s" }} color="text-body-secondary">
+          Signing you in…
+        </Box>
+      </Box>
+    );
+  }
+
 
   return (
     <>
