@@ -32,19 +32,14 @@ function App() {
       });
   }, []);
 
-
   if (authState !== "signedIn") {
     return (
-      <Box
-        textAlign="center"
-        padding={{ top: "xxxl" }}
-        margin={{ top: "xxxl" }}
-      >
+      <div className="full-page-center">
         <Spinner size="large" />
         <Box variant="p" padding={{ top: "s" }} color="text-body-secondary">
-          Signing you in…
+          Redirecting…
         </Box>
-      </Box>
+      </div>
     );
   }
 
