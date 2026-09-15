@@ -32,6 +32,15 @@ export const columnDefinitions: TableProps.ColumnDefinition<AttritionEvent>[] = 
     { id: "notes", header: "Notes", cell: (i) => i.notes ?? "-" },
 ];
 
+export const pendingColumnDefinitions: TableProps.ColumnDefinition<AttritionEvent>[] = [
+    { id: "name", header: "Name", cell: (i) => i.name, isRowHeader: true, sortingField: "name" },
+    { id: "alias", header: "Alias", cell: (i) => i.alias, sortingField: "alias" },
+    { id: "profile", header: "Profile", cell: (i) => i.profile, sortingField: "profile" },
+    { id: "type", header: "Type", cell: (i) => typeBadge(i.type), sortingField: "type" },
+    { id: "timeRole", header: "Time in role", cell: (i) => i.timeRole, sortingField: "timeRole" },
+    { id: "date", header: "Date", cell: (i) => i.date, sortingField: "date" },
+];
+
 export const defaultVisible = new Set(["name", "alias", "profile", "timeRole", "date", "type", "reason"]);
 
 export const filteringProperties = [
@@ -45,5 +54,32 @@ export const defaultDateRange: DateRangePickerProps.RelativeValue = {
     unit: "month",
     key: "previous-3-months",
 };
+
+export const relativeDateOptions: DateRangePickerProps.RelativeOption[] = [
+    {
+        key: "previous-1-month",
+        amount: 1,
+        unit: "month",
+        type: "relative",
+    },
+    {
+        key: "previous-3-months",
+        amount: 3,
+        unit: "month",
+        type: "relative",
+    },
+    {
+        key: "previous-6-months",
+        amount: 6,
+        unit: "month",
+        type: "relative",
+    },
+    {
+        key: "previous-12-months",
+        amount: 12,
+        unit: "month",
+        type: "relative",
+    },
+];
 
 export type ModalMode = "view" | "edit" | "delete";
