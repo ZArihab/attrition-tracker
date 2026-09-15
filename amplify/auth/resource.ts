@@ -20,9 +20,9 @@ export const auth = defineAuth({
           },
         },
       ],
-      logoutUrls: ['https://main.dkz9lzlrv2l33.amplifyapp.com', 'http://localhost:5173'],
+      logoutUrls: ['https://main.d2ut9vyl1de7gq.amplifyapp.com/', 'http://localhost:5173/'],
       callbackUrls: [
-        'https://main.dkz9lzlrv2l33.amplifyapp.com', 'http://localhost:5173'
+        'https://main.d2ut9vyl1de7gq.amplifyapp.com/', 'http://localhost:5173/'
       ],
     },
   },
