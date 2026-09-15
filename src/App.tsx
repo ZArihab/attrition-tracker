@@ -13,31 +13,53 @@ import DashboardPage from "./pages/DashboardPage";
 import AttritionsPage from "./pages/attritions/AttritionsPage";
 import EmployeesPage from "./pages/employees/EmployeesPage";
 
-type AuthState = "checking" | "signedIn" | "signedOut";
+type AuthState = "checking" | "signedIn" | "signedOut" | "error";
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>("checking");
+  const [federateId, setFederateId] = useState<string | null>(null);
 
   // Only attempt sign-in once, and only if the user isn't already signed in.
   useEffect(() => {
     getCurrentUser()
-      .then(() => setAuthState("signedIn"))
+      .then(({ username }) => {
+        const prefix = "amazonfederate_";
+        const id = username.startsWith(prefix)
+          ? username.slice(prefix.length)
+          : username;
+        setFederateId(id);
+        // console.log("user id", userId);
+        setAuthState("signedIn");
+      })
       .catch(() => {
         setAuthState("signedOut");
         signInWithRedirect({ provider: { custom: "AmazonFederate" } }).catch(
-          (err) => console.error("Sign-in redirect failed", err)
+          (err) => {
+            console.error("Sign-in redirect failed", err);
+            setAuthState("error");
+          }
         );
       });
   }, []);
+
+  if (authState === "error") {
+    return (
+      <div className="full-page-center">
+        <Box variant="p" color="text-status-error">
+          We couldn't sign you in. Please refresh the page or try again later.
+        </Box>
+      </div>
+    );
+  }
 
   if (authState !== "signedIn") {
     return (
       <div className="full-page-center">
         <Spinner size="large" />
         <Box variant="p" padding={{ top: "s" }} color="text-body-secondary">
-          Redirecting…
+          {authState === "signedOut" ? "Redirecting…" : "Loading…"}
         </Box>
       </div>
     );
@@ -65,7 +87,7 @@ function App() {
             },
             {
               type: "menu-dropdown",
-              text: "Account",
+              text: federateId ?? undefined,
               iconName: "user-profile",
               items: [
                 { id: "profile", text: "Profile" },
